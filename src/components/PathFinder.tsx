@@ -17,6 +17,7 @@ const PathFinder = () => {
 							col={node.col}
 							isStart={node.isStart}
 							isFinish={node.isFinish}
+							isVisited={node.isVisited}
 						/>
 					))}
 				</div>

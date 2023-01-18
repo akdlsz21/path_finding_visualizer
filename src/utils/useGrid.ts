@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
-
-interface INode {
-	row: number;
-	col: number;
-	isStart: boolean;
-	isFinish: boolean;
-}
+import { createNode } from './createNode';
+import { INode } from '../types';
 
 export const useCreateGrid = () => {
 	const [grid, setGrid] = useState<Array<Array<INode>>>([]);
@@ -16,13 +11,7 @@ export const useCreateGrid = () => {
 		for (let r = 0; r < 15; r++) {
 			const rowContainer = [];
 			for (let c = 0; c < 30; c++) {
-				const node = {
-					row: r,
-					col: c,
-					isStart: r === 10 && c === 5,
-					isFinish: r === 10 && c === 25,
-					isVisited: false,
-				};
+				const node = createNode(r, c);
 				rowContainer.push(node);
 			}
 			tempGrid.push(rowContainer);
