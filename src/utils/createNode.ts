@@ -14,5 +14,6 @@ export const createNode = (row: number, col: number): INode => {
 		isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
 		isVisited: false,
 		distance: Infinity,
+		prevNode: null,
 	};
 };

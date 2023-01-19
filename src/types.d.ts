@@ -5,4 +5,5 @@ export interface INode {
 	isFinish: boolean;
 	isVisited: boolean;
 	distance: number;
+	prevNode: INode | null;
 }
