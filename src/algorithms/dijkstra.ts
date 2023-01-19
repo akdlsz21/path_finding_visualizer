@@ -8,9 +8,11 @@ export function dijkstra(grid: INode[][], startNode: INode, finishNode: INode) {
 	while (!!unvisitedNodes.length) {
 		// TODO: sort unvisitedNode by distance.
 		// Maybe, use a priority data structure in future.
+
 		const minDistanceNode = getMinDistanceNode(unvisitedNodes);
-		console.log(minDistanceNode);
+
 		// TODO: minDistanceNode could be a wall if setted by user.
+
 		if (minDistanceNode.distance === Infinity) return visitedNodesInOrder;
 		minDistanceNode.isVisited = true;
 		visitedNodesInOrder.push(minDistanceNode);
@@ -31,7 +33,10 @@ function setDistanceAndPrevToNeighbors(node: INode, grid: INode[][]) {
 	if (col > 0) neighborsOfNode.push(grid[row][col - 1]);
 	if (col < grid[0].length - 1) neighborsOfNode.push(grid[row][col + 1]);
 
-	for (const neighbor of neighborsOfNode) {
+	const nonVisitedNeighbors = neighborsOfNode.filter(
+		(neighbor) => !neighbor.isVisited
+	);
+	for (const neighbor of nonVisitedNeighbors) {
 		neighbor.distance = node.distance + 1;
 		neighbor.prevNode = node;
 	}
@@ -66,4 +71,26 @@ function getAllNodes(grid: INode[][]) {
 		}
 	}
 	return nodes;
+}
+
+// Backtracks from the finishNode to find the shortest path.
+// Only works when called *after* the dijkstra method above.
+export function getPath(finishNode: INode) {
+	const nodesInShortestPathOrder = [];
+	let currentNode = finishNode;
+	let count = 0;
+
+	// Fixed: BUG: Found Circular referencing with current node to prev.
+	while (currentNode !== null) {
+		nodesInShortestPathOrder.push(currentNode);
+		currentNode = currentNode.prevNode!;
+		count++;
+		if (count >= 3000) {
+			alert('Infinite loop detected.');
+			break;
+		}
+	}
+	// changing to reverse. unshifting each node to array may be slow due to cascade effect. maybe upload to blog.
+	nodesInShortestPathOrder.reverse();
+	return nodesInShortestPathOrder;
 }

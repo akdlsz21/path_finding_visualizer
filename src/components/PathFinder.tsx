@@ -10,7 +10,8 @@ import {
 	START_NODE_COL,
 	START_NODE_ROW,
 } from '../constants';
-import { dijkstra } from '../algorithms/dijkstra';
+import { dijkstra, getPath } from '../algorithms/dijkstra';
+import { INode } from '../types';
 
 const PathFinder = () => {
 	const { grid } = useCreateGrid();
@@ -18,8 +19,19 @@ const PathFinder = () => {
 	const visualizeDijkstra = () => {
 		const startNode = grid[START_NODE_ROW][START_NODE_COL];
 		const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-		const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
-		console.table(visitedNodesInOrder);
+		const visited = dijkstra(grid, startNode, finishNode);
+		const path = getPath(finishNode);
+	};
+
+	const animateVisitedAndPath = (visited: INode[], path: INode[]) => {
+		for (let i = 0; i < visited.length; i++) {
+			setTimeout(() => {
+				const node = visited[i];
+				document
+					.getElementById(`node-${node.row}-${node.col}`)
+					?.classList.add('visited');
+			}, 10 * i);
+		}
 	};
 
 	return (
