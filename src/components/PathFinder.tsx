@@ -16,14 +16,10 @@ const PathFinder = () => {
 	const { grid } = useCreateGrid();
 
 	const visualizeDijkstra = () => {
-		alert('s');
 		const startNode = grid[START_NODE_ROW][START_NODE_COL];
 		const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
 		const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
-		console.log(
-			'🚀 ~ file: PathFinder.tsx:22 ~ visualizeDijkstra ~ visitedNodesInOrder',
-			visitedNodesInOrder
-		);
+		console.table(visitedNodesInOrder);
 	};
 
 	return (

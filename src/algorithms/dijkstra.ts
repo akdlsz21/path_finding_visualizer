@@ -9,6 +9,7 @@ export function dijkstra(grid: INode[][], startNode: INode, finishNode: INode) {
 		// TODO: sort unvisitedNode by distance.
 		// Maybe, use a priority data structure in future.
 		const minDistanceNode = getMinDistanceNode(unvisitedNodes);
+		console.log(minDistanceNode);
 		// TODO: minDistanceNode could be a wall if setted by user.
 		if (minDistanceNode.distance === Infinity) return visitedNodesInOrder;
 		minDistanceNode.isVisited = true;
@@ -36,7 +37,10 @@ function setDistanceAndPrevToNeighbors(node: INode, grid: INode[][]) {
 	}
 }
 
-function getMinDistanceNode(unvisitedNodes: INode[]) {
+function getMinDistanceNode(unvisitedNodes: INode[]): INode {
+	// unvisitedNodes.sort((nodeA, nodeB) => nodeA.distance - nodeB.distance);
+	// const node = unvisitedNodes.shift();
+	// return node!;
 	let minDistanceNode = unvisitedNodes[0];
 	let idx = -1;
 	for (let i = 0; i < unvisitedNodes.length; i++) {
@@ -45,7 +49,11 @@ function getMinDistanceNode(unvisitedNodes: INode[]) {
 			idx = i;
 		}
 	}
-	unvisitedNodes.splice(idx, 1);
+	if (idx === -1) {
+		unvisitedNodes.splice(0, 1);
+	} else {
+		unvisitedNodes.splice(idx, 1);
+	}
 	return minDistanceNode;
 }
 
