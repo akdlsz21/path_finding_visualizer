@@ -12,6 +12,7 @@ import {
 } from '../constants';
 import { dijkstra, getPath } from '../algorithms/dijkstra';
 import { INode } from '../types';
+import { animateAsVisited, animatePath } from '../utils/animations';
 
 const PathFinder = () => {
 	const { grid } = useCreateGrid();
@@ -21,16 +22,16 @@ const PathFinder = () => {
 		const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
 		const visited = dijkstra(grid, startNode, finishNode);
 		const path = getPath(finishNode);
+		animateVisitedAndPath(visited, path);
 	};
 
 	const animateVisitedAndPath = (visited: INode[], path: INode[]) => {
 		for (let i = 0; i < visited.length; i++) {
-			setTimeout(() => {
-				const node = visited[i];
-				document
-					.getElementById(`node-${node.row}-${node.col}`)
-					?.classList.add('visited');
-			}, 10 * i);
+			const { row, col } = visited[i];
+			animateAsVisited(row, col, i);
+			if (i === visited.length - 1) {
+				animatePath(path, i);
+			}
 		}
 	};
 

@@ -13,8 +13,8 @@ const Node = ({ row, col, isStart, isFinish, isVisited }: NodeProps) => {
 	if (isStart) nodeClassName += ' start';
 	if (isFinish) nodeClassName += ' finish';
 	if (isVisited) nodeClassName += ' visited';
-
-	return <div className={nodeClassName}></div>;
+	const id = `node-${row}-${col}`;
+	return <div className={nodeClassName} id={id}></div>;
 };
 
 export default Node;
