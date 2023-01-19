@@ -38,11 +38,14 @@ function setDistanceAndPrevToNeighbors(node: INode, grid: INode[][]) {
 
 function getMinDistanceNode(unvisitedNodes: INode[]) {
 	let minDistanceNode = unvisitedNodes[0];
+	let idx = -1;
 	for (let i = 0; i < unvisitedNodes.length; i++) {
 		if (unvisitedNodes[i].distance < minDistanceNode.distance) {
 			minDistanceNode = unvisitedNodes[i];
+			idx = i;
 		}
 	}
+	unvisitedNodes.splice(idx, 1);
 	return minDistanceNode;
 }
 
