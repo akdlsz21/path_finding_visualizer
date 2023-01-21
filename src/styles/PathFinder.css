@@ -9,7 +9,6 @@
 	background-color: white;
 	outline: 1px solid black;
 	display: block;
-	margin: 2px;
 }
 
 .start {
@@ -26,4 +25,8 @@
 
 .path {
 	background-color: yellow;
+}
+
+.wall {
+	background-color: black;
 }

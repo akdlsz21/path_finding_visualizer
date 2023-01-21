@@ -18,5 +18,5 @@ export const useCreateGrid = () => {
 		}
 		setGrid(tempGrid);
 	}, []);
-	return { grid };
+	return { grid, setGrid };
 };

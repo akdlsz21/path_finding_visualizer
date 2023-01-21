@@ -1,7 +1,11 @@
 import { INode } from '../types';
 
-export function dijkstra(grid: INode[][], startNode: INode, finishNode: INode) {
-	const visitedNodesInOrder: INode[] = [];
+export function initiateDijkstra(
+	grid: INode[][],
+	startNode: INode,
+	finishNode: INode
+) {
+	const visited: INode[] = [];
 	startNode.distance = 0;
 	const unvisitedNodes = getAllNodes(grid);
 
@@ -11,17 +15,17 @@ export function dijkstra(grid: INode[][], startNode: INode, finishNode: INode) {
 
 		const minDistanceNode = getMinDistanceNode(unvisitedNodes);
 
-		// TODO: minDistanceNode could be a wall if setted by user.
-
-		if (minDistanceNode.distance === Infinity) return visitedNodesInOrder;
+		// (done) TODO: minDistanceNode could be a wall if setted by user.
+		if (minDistanceNode.isWall) continue;
+		if (minDistanceNode.distance === Infinity) return visited;
 		minDistanceNode.isVisited = true;
-		visitedNodesInOrder.push(minDistanceNode);
+		visited.push(minDistanceNode);
 
-		if (minDistanceNode === finishNode) return visitedNodesInOrder;
+		if (minDistanceNode === finishNode) return visited;
 		setDistanceAndPrevToNeighbors(minDistanceNode, grid);
 	}
 
-	return visitedNodesInOrder;
+	return visited;
 }
 
 function setDistanceAndPrevToNeighbors(node: INode, grid: INode[][]) {

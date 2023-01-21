@@ -13,6 +13,7 @@ export const createNode = (row: number, col: number): INode => {
 		isStart: row === START_NODE_ROW && col === START_NODE_COL,
 		isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
 		isVisited: false,
+		isWall: false,
 		distance: Infinity,
 		prevNode: null,
 	};

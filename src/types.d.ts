@@ -6,4 +6,5 @@ export interface INode {
 	isVisited: boolean;
 	distance: number;
 	prevNode: INode | null;
+	isWall: boolean;
 }
