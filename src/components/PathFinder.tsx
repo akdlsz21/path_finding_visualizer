@@ -16,8 +16,9 @@ import { animateAsVisited, animatePath } from '../utils/animations';
 
 const PathFinder = () => {
 	const [speed, setSpeed] = useState(10);
-	const { grid, setGrid } = useCreateGrid();
 	const [isMouseDown, setIsMouseDown] = useState(false);
+	const [isSNodeRepositioning, setIsSNodeRepositioning] = useState(false);
+	const [isFNodeRepositioning, setIsFNodeRepositioning] = useState(false);
 	const [startNodePos, setStartNodePos] = useState({
 		row: START_NODE_ROW,
 		col: START_NODE_COL,
@@ -26,13 +27,17 @@ const PathFinder = () => {
 		row: FINISH_NODE_ROW,
 		col: FINISH_NODE_COL,
 	});
-
+	const { grid, setGrid } = useCreateGrid(startNodePos, finNodePos);
+	const [isVisualizing, setIsVisualizing] = useState(false);
 	const visualizeDijkstra = () => {
+		setIsVisualizing(true);
+		if (isVisualizing) return;
 		const startNode = grid[startNodePos.row][startNodePos.col];
 		const finishNode = grid[finNodePos.row][finNodePos.col];
 		const visited = initiateDijkstra(grid, startNode, finishNode);
 		const path = getPath(finishNode);
 		animateVisitedAndPath(visited, path);
+		setIsVisualizing(false);
 	};
 
 	const animateVisitedAndPath = (visited: INode[], path: INode[]) => {
@@ -46,20 +51,33 @@ const PathFinder = () => {
 	};
 
 	const handleMouseDown = (row: number, col: number) => {
-		// const target = e.target as HTMLDivElement;
-		// const row = parseInt(target.getAttribute('data-row') as string);
-		// const col = parseInt(target.getAttribute('data-col') as string);
-		// const isStart = target.classList.contains('start');
-		// const isFinish = target.classList.contains('finish');
-		// if (isStart) {
-		// 	setStartNodePos({ row, col });
-		// } else if (isFinish) {
-		// 	setFinishNodePos({ row, col });
-		// }
-
+		if (isVisualizing) return;
 		const node = grid[row][col];
-		if (node.isStart) return;
-		if (node.isFinish) return;
+		if (node.isStart || isSNodeRepositioning) {
+			setIsMouseDown(true);
+			setIsSNodeRepositioning(true);
+			setStartNodePos({ row, col });
+			grid[row][col] = node;
+			setGrid((prevGrid) => {
+				prevGrid[row][col] = node;
+				return [...prevGrid];
+			});
+			setIsMouseDown(true);
+			return;
+		}
+		if (node.isFinish || isFNodeRepositioning) {
+			setIsMouseDown(true);
+			setIsFNodeRepositioning(true);
+			setFinishNodePos({ row, col });
+			grid[row][col] = node;
+			setGrid((prevGrid) => {
+				prevGrid[row][col] = node;
+				return [...prevGrid];
+			});
+			setIsMouseDown(true);
+			return;
+		}
+
 		node.isWall = !node.isWall;
 		grid[row][col] = node;
 		setGrid([...grid]);
@@ -67,13 +85,26 @@ const PathFinder = () => {
 	};
 
 	const handleMouseEnter = (row: number, col: number) => {
+		if (isVisualizing) return;
 		if (!isMouseDown) return;
+		if (isSNodeRepositioning) {
+			// setStartNodePos({ row, col });
+			handleMouseDown(row, col);
+			return;
+		}
+		if (isFNodeRepositioning) {
+			// setFinishNodePos({ row, col });
+			handleMouseDown(row, col);
+			return;
+		}
 		handleMouseDown(row, col);
 	};
 
 	const handleMouseUp = () => {
-		console.log('up!');
-		// TODO: handleMouseUp should be added to grid itself.
+		if (isVisualizing) return;
+		// (done) TODO: handleMouseUp should be added to grid itself + the node.
+		setIsSNodeRepositioning(false);
+		setIsFNodeRepositioning(false);
 		setIsMouseDown(false);
 	};
 
@@ -85,20 +116,22 @@ const PathFinder = () => {
 			<div className="grid" onMouseUp={handleMouseUp}>
 				{grid.map((con, i) => (
 					<div className="row-ctn" key={i}>
-						{con.map((node, i) => (
-							<Node
-								key={i}
-								row={node.row}
-								col={node.col}
-								isStart={node.isStart}
-								isFinish={node.isFinish}
-								isVisited={node.isVisited}
-								isWall={node.isWall}
-								onMouseDown={handleMouseDown}
-								onMouseEnter={handleMouseEnter}
-								onMouseUp={handleMouseUp}
-							/>
-						))}
+						{con.map((node, i) => {
+							return (
+								<Node
+									key={i}
+									row={node.row}
+									col={node.col}
+									isStart={node.isStart}
+									isFinish={node.isFinish}
+									isVisited={node.isVisited}
+									isWall={node.isWall}
+									onMouseDown={handleMouseDown}
+									onMouseEnter={handleMouseEnter}
+									onMouseUp={handleMouseUp}
+								/>
+							);
+						})}
 					</div>
 				))}
 			</div>

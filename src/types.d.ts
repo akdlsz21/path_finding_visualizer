@@ -8,3 +8,8 @@ export interface INode {
 	prevNode: INode | null;
 	isWall: boolean;
 }
+
+export interface NodePos {
+	row: number;
+	col: number;
+}

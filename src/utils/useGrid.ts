@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { createNode } from './createNode';
-import { INode } from '../types';
+import { INode, NodePos } from '../types';
 
-export const useCreateGrid = () => {
+export const useCreateGrid = (startNodePos: NodePos, finNodePos: NodePos) => {
 	const [grid, setGrid] = useState<Array<Array<INode>>>([]);
 
 	useEffect(() => {
@@ -11,12 +11,12 @@ export const useCreateGrid = () => {
 		for (let r = 0; r < 15; r++) {
 			const rowContainer = [];
 			for (let c = 0; c < 30; c++) {
-				const node = createNode(r, c);
+				const node = createNode(r, c, startNodePos, finNodePos);
 				rowContainer.push(node);
 			}
 			tempGrid.push(rowContainer);
 		}
 		setGrid(tempGrid);
-	}, []);
+	}, [startNodePos.row, startNodePos.col, finNodePos.row, finNodePos.col]);
 	return { grid, setGrid };
 };

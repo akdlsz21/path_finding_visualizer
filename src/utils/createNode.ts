@@ -1,17 +1,16 @@
-import {
-	FINISH_NODE_COL,
-	FINISH_NODE_ROW,
-	START_NODE_COL,
-	START_NODE_ROW,
-} from '../constants';
-import { INode } from '../types';
+import { INode, NodePos } from '../types';
 
-export const createNode = (row: number, col: number): INode => {
+export const createNode = (
+	row: number,
+	col: number,
+	startNodePos: NodePos,
+	finNodePos: NodePos
+): INode => {
 	return {
 		row,
 		col,
-		isStart: row === START_NODE_ROW && col === START_NODE_COL,
-		isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
+		isStart: row === startNodePos.row && col === startNodePos.col,
+		isFinish: row === finNodePos.row && col === finNodePos.col,
 		isVisited: false,
 		isWall: false,
 		distance: Infinity,
