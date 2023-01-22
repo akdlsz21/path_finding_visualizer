@@ -29,6 +29,7 @@ const Node = ({
 	if (isVisited) nodeClassName += ' visited';
 	if (isWall) nodeClassName += ' wall';
 	const id = `node-${row}-${col}`;
+	// BUG: dragging
 	return (
 		<div
 			className={nodeClassName}
@@ -36,6 +37,9 @@ const Node = ({
 			onMouseDown={() => onMouseDown(row, col)}
 			onMouseEnter={() => onMouseEnter(row, col)}
 			onMouseUp={() => onMouseUp()}
+			onDragStart={() => onMouseDown(row, col)}
+			onDragEnter={() => onMouseEnter(row, col)}
+			onDragEnd={() => onMouseUp()}
 		></div>
 	);
 };

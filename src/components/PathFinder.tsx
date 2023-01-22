@@ -14,6 +14,8 @@ import { initiateDijkstra, getPath } from '../algorithms/dijkstra';
 import { INode } from '../types';
 import { animateAsVisited, animatePath } from '../utils/animations';
 
+let isVisualizing = false;
+
 const PathFinder = () => {
 	const [speed, setSpeed] = useState(10);
 	const [isMouseDown, setIsMouseDown] = useState(false);
@@ -28,30 +30,37 @@ const PathFinder = () => {
 		col: FINISH_NODE_COL,
 	});
 	const { grid, setGrid } = useCreateGrid(startNodePos, finNodePos);
-	const [isVisualizing, setIsVisualizing] = useState(false);
+
 	const visualizeDijkstra = () => {
-		setIsVisualizing(true);
-		if (isVisualizing) return;
+		isVisualizing = true;
 		const startNode = grid[startNodePos.row][startNodePos.col];
 		const finishNode = grid[finNodePos.row][finNodePos.col];
 		const visited = initiateDijkstra(grid, startNode, finishNode);
 		const path = getPath(finishNode);
 		animateVisitedAndPath(visited, path);
-		setIsVisualizing(false);
 	};
 
 	const animateVisitedAndPath = (visited: INode[], path: INode[]) => {
+		let totalTime = 0;
+
 		for (let i = 0; i < visited.length; i++) {
 			const { row, col } = visited[i];
-			animateAsVisited(row, col, i, speed);
+			animateAsVisited(row, col, i, speed, startNodePos, finNodePos);
 			if (i === visited.length - 1) {
-				animatePath(path, i, speed);
+				animatePath(path, i, speed, startNodePos, finNodePos);
+			}
+			if (i === visited.length - 1) {
+				totalTime = (i + path.length) * speed;
+				setTimeout(() => {
+					isVisualizing = false;
+				}, totalTime);
 			}
 		}
 	};
 
 	const handleMouseDown = (row: number, col: number) => {
 		if (isVisualizing) return;
+
 		const node = grid[row][col];
 		if (node.isStart || isSNodeRepositioning) {
 			setIsMouseDown(true);
@@ -85,24 +94,23 @@ const PathFinder = () => {
 	};
 
 	const handleMouseEnter = (row: number, col: number) => {
-		if (isVisualizing) return;
 		if (!isMouseDown) return;
+		if (isVisualizing) return;
+
 		if (isSNodeRepositioning) {
-			// setStartNodePos({ row, col });
 			handleMouseDown(row, col);
 			return;
 		}
+
 		if (isFNodeRepositioning) {
-			// setFinishNodePos({ row, col });
 			handleMouseDown(row, col);
-			return;
 		}
+
 		handleMouseDown(row, col);
 	};
-
 	const handleMouseUp = () => {
 		if (isVisualizing) return;
-		// (done) TODO: handleMouseUp should be added to grid itself + the node.
+
 		setIsSNodeRepositioning(false);
 		setIsFNodeRepositioning(false);
 		setIsMouseDown(false);
