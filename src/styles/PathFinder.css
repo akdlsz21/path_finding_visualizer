@@ -20,13 +20,65 @@
 }
 
 .visited {
-	background-color: blue;
+	animation-name: visitedAnimation;
+	animation-duration: 1s;
+	animation-timing-function: ease-in;
+	animation-delay: 0;
+	animation-direction: alternate;
+	animation-iteration-count: 1;
+	animation-fill-mode: both;
+	animation-play-state: running;
 }
+@keyframes visitedAnimation {
+	0% {
+		transform: scale(0.3);
+		background-color: rgba(211, 155, 123, 0.75);
+		border-radius: 100%;
+	}
 
-.path {
-	background-color: yellow;
+	50% {
+		background-color: rgb(252, 205, 151);
+	}
+
+	75% {
+		transform: scale(0.8);
+		background-color: rgba(0, 217, 159, 0.75);
+	}
+
+	100% {
+		transform: scale(0.95);
+		background-color: rgb(8, 222, 255);
+	}
 }
 
 .wall {
 	background-color: black;
+}
+
+.path {
+	animation-name: shortestPath;
+	animation-duration: 1.5s;
+	animation-timing-function: ease-out;
+	animation-delay: 0;
+	animation-direction: alternate;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+	animation-play-state: running;
+}
+
+@keyframes shortestPath {
+	0% {
+		transform: scale(0.6);
+		background-color: rgb(156, 235, 134);
+	}
+
+	50% {
+		transform: scale(1.1);
+		background-color: rgb(228, 228, 121);
+	}
+
+	100% {
+		transform: scale(1);
+		background-color: rgb(253, 207, 0);
+	}
 }

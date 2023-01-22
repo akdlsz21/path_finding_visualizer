@@ -8,9 +8,9 @@ export const useCreateGrid = (startNodePos: NodePos, finNodePos: NodePos) => {
 	useEffect(() => {
 		const tempGrid: INode[][] = [];
 
-		for (let r = 0; r < 20; r++) {
+		for (let r = 0; r < 16; r++) {
 			const rowContainer = [];
-			for (let c = 0; c < 70; c++) {
+			for (let c = 0; c < 64; c++) {
 				const node = createNode(r, c, startNodePos, finNodePos);
 				rowContainer.push(node);
 			}
