@@ -34,6 +34,6 @@ export function animatePath(
 			document
 				.getElementById(`node-${path[i].row}-${path[i].col}`)
 				?.classList.add('path');
-		}, speed * (i + lastTurn));
+		}, speed * (i + lastTurn) + 800);
 	}
 }

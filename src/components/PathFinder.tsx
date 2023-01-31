@@ -13,11 +13,12 @@ import {
 import { initiateDijkstra, getPath } from '../algorithms/dijkstra';
 import { INode } from '../types';
 import { animateAsVisited, animatePath } from '../utils/animations';
+import { randomMaze } from '../algorithms/maze/randomMaze';
 
 let isVisualizing = false;
 
 const PathFinder = () => {
-	const [speed, setSpeed] = useState(10);
+	const [speed, setSpeed] = useState(12);
 	const [isMouseDown, setIsMouseDown] = useState(false);
 	const [isSNodeRepositioning, setIsSNodeRepositioning] = useState(false);
 	const [isFNodeRepositioning, setIsFNodeRepositioning] = useState(false);
@@ -30,6 +31,8 @@ const PathFinder = () => {
 		col: FINISH_NODE_COL,
 	});
 	const { grid, setGrid } = useCreateGrid(startNodePos, finNodePos);
+	const [numOfVisited, setNumOfVisited] = useState(0);
+	const [numOfPath, setNumOfPath] = useState(0);
 
 	const visualizeDijkstra = () => {
 		isVisualizing = true;
@@ -116,10 +119,27 @@ const PathFinder = () => {
 		setIsMouseDown(false);
 	};
 
+	const handleRandomMazeClick = () => {
+		const startNode = grid[startNodePos.row][startNodePos.col];
+		const finishNode = grid[finNodePos.row][finNodePos.col];
+		const walls = randomMaze(startNode, finishNode, grid);
+
+		for (let i = 0; i < walls.length; i++) {
+			setTimeout(() => {
+				const wallNode = walls[i];
+				const { row, col } = wallNode;
+				document
+					.getElementById(`node-${row}-${col}`)
+					?.classList.add('wall');
+			}, i * speed);
+		}
+	};
+
 	return (
 		<>
 			<nav className="nav">
 				<button onClick={visualizeDijkstra}>start</button>
+				<button onClick={handleRandomMazeClick}>maze</button>
 			</nav>
 			<div className="grid" onMouseUp={handleMouseUp}>
 				{grid.map((con, i) => (
