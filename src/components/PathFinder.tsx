@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../styles/PathFinder.css';
 import '../styles/etc.css';
 import Node from './Node';
@@ -14,8 +14,7 @@ import { initiateDijkstra, getPath } from '../algorithms/dijkstra';
 import { INode } from '../types';
 import { animateAsVisited, animatePath } from '../utils/animations';
 import { randomMaze } from '../algorithms/maze/randomMaze';
-
-let isVisualizing = false;
+import { recursiveDivisionMaze } from '../algorithms/maze/recursiveMaze';
 
 const PathFinder = () => {
 	const [speed, setSpeed] = useState(12);
@@ -33,9 +32,10 @@ const PathFinder = () => {
 	const { grid, setGrid } = useCreateGrid(startNodePos, finNodePos);
 	const [numOfVisited, setNumOfVisited] = useState(0);
 	const [numOfPath, setNumOfPath] = useState(0);
+	const isVisualizingRef = useRef(false);
 
 	const visualizeDijkstra = () => {
-		isVisualizing = true;
+		isVisualizingRef.current = true;
 		const startNode = grid[startNodePos.row][startNodePos.col];
 		const finishNode = grid[finNodePos.row][finNodePos.col];
 		const visited = initiateDijkstra(grid, startNode, finishNode);
@@ -45,7 +45,6 @@ const PathFinder = () => {
 
 	const animateVisitedAndPath = (visited: INode[], path: INode[]) => {
 		let totalTime = 0;
-
 		for (let i = 0; i < visited.length; i++) {
 			const { row, col } = visited[i];
 			animateAsVisited(row, col, i, speed, startNodePos, finNodePos);
@@ -55,14 +54,14 @@ const PathFinder = () => {
 			if (i === visited.length - 1) {
 				totalTime = (i + path.length) * speed;
 				setTimeout(() => {
-					isVisualizing = false;
+					isVisualizingRef.current = false;
 				}, totalTime);
 			}
 		}
 	};
 
 	const handleMouseDown = (row: number, col: number) => {
-		if (isVisualizing) return;
+		if (isVisualizingRef.current) return;
 
 		const node = grid[row][col];
 		if (node.isStart || isSNodeRepositioning) {
@@ -91,6 +90,7 @@ const PathFinder = () => {
 		}
 
 		node.isWall = !node.isWall;
+
 		grid[row][col] = node;
 		setGrid([...grid]);
 		setIsMouseDown(true);
@@ -98,7 +98,7 @@ const PathFinder = () => {
 
 	const handleMouseEnter = (row: number, col: number) => {
 		if (!isMouseDown) return;
-		if (isVisualizing) return;
+		if (isVisualizingRef.current) return;
 
 		if (isSNodeRepositioning) {
 			handleMouseDown(row, col);
@@ -112,7 +112,7 @@ const PathFinder = () => {
 		handleMouseDown(row, col);
 	};
 	const handleMouseUp = () => {
-		if (isVisualizing) return;
+		if (isVisualizingRef.current) return;
 
 		setIsSNodeRepositioning(false);
 		setIsFNodeRepositioning(false);
@@ -135,10 +135,16 @@ const PathFinder = () => {
 		}
 	};
 
+	const handleRecursiveMaze = () => {
+		const startNode = grid[startNodePos.row][startNodePos.col];
+		const finishNode = grid[finNodePos.row][finNodePos.col];
+	};
+
 	return (
 		<>
 			<nav className="nav">
 				<button onClick={visualizeDijkstra}>start</button>
+				<button onClick={handleRecursiveMaze}>walls</button>
 				<button onClick={handleRandomMazeClick}>maze</button>
 			</nav>
 			<div className="grid" onMouseUp={handleMouseUp}>
