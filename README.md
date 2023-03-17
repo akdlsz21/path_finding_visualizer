@@ -9,6 +9,11 @@ gets all nodes in the grid using the getAllNodes function, which is defined
 below.
 
 ## initiateDijikstra
+![image](https://user-images.githubusercontent.com/81629070/225824487-20458a03-5e31-435b-bba9-3569fb6ecb35.png)
+![image](https://user-images.githubusercontent.com/81629070/225824531-09f9e923-ac24-465b-86b1-faace53c8a05.png)
+
+
+
 
 The algorithm proceeds by iterating through the unvisited nodes in the grid
 until all nodes have been visited or the finishNode has been reached. In each
