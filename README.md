@@ -1,3 +1,11 @@
+# DEMO
+
+
+
+
+https://user-images.githubusercontent.com/81629070/231227114-8e599780-f37e-402e-9c43-52a55ec81cea.mp4
+
+
 # path_finding_visualizer
 
 This is a TypeScript module that implements the Dijkstra's algorithm for finding
