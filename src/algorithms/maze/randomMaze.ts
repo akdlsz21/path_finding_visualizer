@@ -12,6 +12,6 @@ export function randomMaze(start: INode, fin: INode, grid: INode[][]) {
 			}
 		}
 	}
-
+	console.log(walls[0]);
 	return walls;
 }

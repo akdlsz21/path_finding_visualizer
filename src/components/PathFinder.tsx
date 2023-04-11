@@ -33,7 +33,6 @@ const PathFinder = () => {
 	const [numOfVisited, setNumOfVisited] = useState(0);
 	const [numOfPath, setNumOfPath] = useState(0);
 	const isVisualizingRef = useRef(false);
-
 	const visualizeDijkstra = () => {
 		isVisualizingRef.current = true;
 		const startNode = grid[startNodePos.row][startNodePos.col];
@@ -123,7 +122,7 @@ const PathFinder = () => {
 		const startNode = grid[startNodePos.row][startNodePos.col];
 		const finishNode = grid[finNodePos.row][finNodePos.col];
 		const walls = randomMaze(startNode, finishNode, grid);
-
+		console.log(walls);
 		for (let i = 0; i < walls.length; i++) {
 			setTimeout(() => {
 				const wallNode = walls[i];
@@ -138,14 +137,25 @@ const PathFinder = () => {
 	const handleRecursiveMaze = () => {
 		const startNode = grid[startNodePos.row][startNodePos.col];
 		const finishNode = grid[finNodePos.row][finNodePos.col];
+		const walls = recursiveDivisionMaze(grid, startNode, finishNode);
+
+		for (let i = 0; i < walls.length; i++) {
+			setTimeout(() => {
+				const wallNode = walls[i];
+				const { row, col } = wallNode;
+				document
+					.getElementById(`node-${row}-${col}`)
+					?.classList.add('wall');
+			}, i * speed);
+		}
 	};
 
 	return (
 		<>
 			<nav className="nav">
-				<button onClick={visualizeDijkstra}>start</button>
-				<button onClick={handleRecursiveMaze}>walls</button>
-				<button onClick={handleRandomMazeClick}>maze</button>
+				<button onClick={visualizeDijkstra}>START</button>
+				<button onClick={handleRecursiveMaze}>RECURSIVE</button>
+				<button onClick={handleRandomMazeClick}>RANDOM</button>
 			</nav>
 			<div className="grid" onMouseUp={handleMouseUp}>
 				{grid.map((con, i) => (
