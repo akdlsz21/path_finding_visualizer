@@ -13,7 +13,11 @@ export function animateAsVisited(
 		const { row: fRow, col: fCol } = finishNodePos;
 		if (row === sRow && col === sCol) return;
 		if (row === fRow && col === fCol) return;
+		// debugger;
+		console.log(turn);
+		debugger;
 		document.getElementById(`node-${row}-${col}`)?.classList.add('visited');
+		console.log(speed * turn);
 	}, speed * turn);
 }
 

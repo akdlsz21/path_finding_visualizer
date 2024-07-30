@@ -33,6 +33,9 @@ const PathFinder = () => {
 	const [numOfVisited, setNumOfVisited] = useState(0);
 	const [numOfPath, setNumOfPath] = useState(0);
 	const isVisualizingRef = useRef(false);
+
+	const [isVisualizing, setIsVisualizing] = useState(false);
+
 	const visualizeDijkstra = () => {
 		isVisualizingRef.current = true;
 		const startNode = grid[startNodePos.row][startNodePos.col];
@@ -43,17 +46,33 @@ const PathFinder = () => {
 	};
 
 	const animateVisitedAndPath = (visited: INode[], path: INode[]) => {
+		console.log('@animateVisitedAndPath');
 		let totalTime = 0;
+		setIsVisualizing(true);
+		console.log(isVisualizing);
 		for (let i = 0; i < visited.length; i++) {
+			// debugger;
+			console.log(
+				'🚀 ~ animateVisitedAndPath ~ visited.length:',
+				visited.length
+			);
 			const { row, col } = visited[i];
+			// if (i === 0) {
+			// 	setTimeout(() => {
+			// 		setIsVisualizing(true);
+			// 	}, 1000);
+			// }
+
 			animateAsVisited(row, col, i, speed, startNodePos, finNodePos);
 			if (i === visited.length - 1) {
 				animatePath(path, i, speed, startNodePos, finNodePos);
 			}
 			if (i === visited.length - 1) {
 				totalTime = (i + path.length) * speed;
+				console.log('🚀 ~ animateVisitedAndPath ~ totalTime:', totalTime);
 				setTimeout(() => {
 					isVisualizingRef.current = false;
+					// setIsVisualizing(false);
 				}, totalTime);
 			}
 		}
